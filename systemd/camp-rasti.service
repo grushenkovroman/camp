@@ -10,7 +10,7 @@ WorkingDirectory=/home/grushenkov/projects/camp-program
 EnvironmentFile=/home/grushenkov/projects/camp-program/.env
 ExecStart=/home/grushenkov/projects/camp-program/.venv/bin/gunicorn \
   --workers 2 \
-  --bind 127.0.0.1:8090 \
+  --bind 127.0.0.1:8091 \
   --access-logfile - \
   --error-logfile - \
   "app:create_app()"

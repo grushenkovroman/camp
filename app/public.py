@@ -9,16 +9,11 @@ from .utils import today_local, parse_date, shift_date
 bp = Blueprint("public", __name__)
 
 
-@bp.get("/<team_uuid>")
-def team_page(team_uuid: str):
-    try:
-        tid = uuid.UUID(team_uuid)
-    except ValueError:
-        abort(404)
-
+@bp.get("/<uuid:team_uuid>")
+def team_page(team_uuid: uuid.UUID):
     db = SessionLocal()
     try:
-        team = db.get(Team, tid)
+        team = db.get(Team, team_uuid)
         if not team:
             abort(404)
 
