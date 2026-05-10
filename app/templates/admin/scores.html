@@ -1,0 +1,57 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Начисления — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Начисления</h2>
+
+  <form class="quick-score" method="post" action="{{ url_for('admin.score_create') }}">
+    <select name="team_id" required>
+      <option value="">— команда —</option>
+      {% for t in teams %}
+        <option value="{{ t.id }}">{{ t.name }}</option>
+      {% endfor %}
+    </select>
+    <input name="points" type="number" placeholder="±баллы" required step="1">
+    <input name="reason" type="text" placeholder="причина (свободный текст)">
+    <input name="event_date" type="date" value="{{ selected.isoformat() }}">
+    <button class="btn btn--primary" type="submit">Начислить</button>
+  </form>
+
+  <form class="date-form" method="get">
+    <label>
+      <span>Показать за дату</span>
+      <input type="date" name="date" value="{{ selected.isoformat() }}" onchange="this.form.submit()">
+    </label>
+  </form>
+
+  {% if events %}
+  <table class="events-table">
+    <thead>
+      <tr><th>Команда</th><th>Баллы</th><th>Причина</th><th>Кем</th><th>Когда</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for evt, team in events %}
+      <tr>
+        <td>
+          <span class="dot" style="background: {{ team.color }}"></span>
+          {{ team.name }}
+        </td>
+        <td class="{% if evt.points < 0 %}neg{% else %}pos{% endif %}">{{ '{0:+d}'.format(evt.points) }}</td>
+        <td>{{ evt.reason or '—' }}</td>
+        <td>{{ evt.created_by or '—' }}</td>
+        <td>{{ evt.created_at.strftime('%d.%m %H:%M') }}</td>
+        <td>
+          <form method="post" action="{{ url_for('admin.score_delete', event_id=evt.id) }}" onsubmit="return confirm('Удалить начисление?')">
+            <button class="btn btn--ghost btn--small" type="submit">Удалить</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">за {{ selected.strftime('%d.%m.%Y') }} начислений нет</div>
+  {% endif %}
+</section>
+{% endblock %}

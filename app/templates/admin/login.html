@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Вход — admin{% endblock %}
+{% block body_class %}admin admin--login{% endblock %}
+{% block content %}
+<div class="login-wrap">
+  <form class="login-card" method="post">
+    <h1 class="login-title">CAMP / ADMIN</h1>
+    <label>
+      <span>Логин</span>
+      <input name="login" autofocus required>
+    </label>
+    <label>
+      <span>Пароль</span>
+      <input name="password" type="password" required>
+    </label>
+    <button class="btn btn--primary" type="submit">Войти</button>
+  </form>
+</div>
+{% endblock %}

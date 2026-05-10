@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} — camp.rasti24{% endblock %}
+{% block body_class %}public{% endblock %}
+{% block body_style %}--team-color: {{ team.color }};{% endblock %}
+
+{% block content %}
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<main class="team-page">
+  <header class="team-head">
+    <div class="team-head__chip">КОМАНДА</div>
+    <h1 class="team-head__name glow">{{ team.name }}</h1>
+    <div class="team-head__total">
+      <span class="lbl">всего за смену</span>
+      <span class="val glow">{{ '{0:+d}'.format(total_all) if total_all else 0 }}</span>
+    </div>
+  </header>
+
+  <section class="date-bar">
+    <a class="date-arrow" href="?date={{ prev_date.isoformat() }}" title="предыдущий день">◀</a>
+    <div class="date-bar__center">
+      <div class="date-bar__date glow">{{ selected.strftime('%d.%m.%Y') }}</div>
+      <div class="date-bar__sub">
+        {% if selected == today %}сегодня{% else %}{{ selected.strftime('%A') }}{% endif %}
+      </div>
+    </div>
+    <a class="date-arrow" href="?date={{ next_date.isoformat() }}" title="следующий день">▶</a>
+  </section>
+
+  {% if task and task.content %}
+  <section class="card task-card">
+    <div class="card__title">ЗАДАНИЕ ДНЯ</div>
+    <div class="task-card__body">{{ task.content }}</div>
+  </section>
+  {% endif %}
+
+  <section class="card score-card">
+    <div class="score-card__head">
+      <div class="card__title">НАЧИСЛЕНИЯ</div>
+      <div class="score-card__total">
+        <span class="lbl">за день</span>
+        <span class="val glow {% if total_today < 0 %}neg{% endif %}">{{ '{0:+d}'.format(total_today) if total_today else 0 }}</span>
+      </div>
+    </div>
+
+    {% if events %}
+    <ul class="events">
+      {% for e in events %}
+      <li class="event {% if e.points < 0 %}event--neg{% else %}event--pos{% endif %}">
+        <div class="event__points">{{ '{0:+d}'.format(e.points) }}</div>
+        <div class="event__reason">{{ e.reason or '—' }}</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty">за этот день начислений нет</div>
+    {% endif %}
+  </section>
+
+  <section class="card roster-card">
+    <div class="card__title">СОСТАВ</div>
+    <div class="roster">
+      {% if mentors %}
+      <div class="roster__group">
+        <div class="roster__lbl">Наставники</div>
+        <ul class="roster__list">
+          {% for m in mentors %}<li class="roster__item">{{ m.name }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% if members %}
+      <div class="roster__group">
+        <div class="roster__lbl">Участники</div>
+        <ul class="roster__list">
+          {% for m in members %}<li class="roster__item">{{ m.name }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% if not mentors and not members %}
+      <div class="empty">состав не указан</div>
+      {% endif %}
+    </div>
+  </section>
+</main>
+{% endblock %}

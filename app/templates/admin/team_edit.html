@@ -1,0 +1,70 @@
+{% extends "admin/_layout.html" %}
+{% block title %}{{ team.name }} — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <a class="back" href="{{ url_for('admin.dashboard') }}">← к командам</a>
+  <h2>Команда: {{ team.name }}</h2>
+
+  <form class="team-form" method="post" action="{{ url_for('admin.team_update', team_id=team.id) }}">
+    <div class="row">
+      <label class="col">
+        <span>Название</span>
+        <input name="name" value="{{ team.name }}" required>
+      </label>
+      <label class="col col--narrow">
+        <span>Цвет (HEX)</span>
+        <input name="color" value="{{ team.color }}" required pattern="#?[0-9A-Fa-f]{6}">
+      </label>
+      <div class="col col--narrow">
+        <span>Превью</span>
+        <div class="color-preview" style="background: {{ team.color }}; box-shadow: 0 0 24px {{ team.color }};"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h3>Наставники</h3>
+        <div class="dyn-list" data-name="mentor_name">
+          {% for m in team.members if m.role == 'mentor' %}
+            <input name="mentor_name" value="{{ m.name }}">
+          {% endfor %}
+          <input name="mentor_name" placeholder="Имя наставника">
+        </div>
+        <button class="btn btn--ghost" type="button" data-add="mentor_name">+ ещё</button>
+      </div>
+      <div class="col">
+        <h3>Участники</h3>
+        <div class="dyn-list" data-name="member_name">
+          {% for m in team.members if m.role == 'member' %}
+            <input name="member_name" value="{{ m.name }}">
+          {% endfor %}
+          <input name="member_name" placeholder="Имя участника">
+        </div>
+        <button class="btn btn--ghost" type="button" data-add="member_name">+ ещё</button>
+      </div>
+    </div>
+
+    <button class="btn btn--primary" type="submit">Сохранить</button>
+  </form>
+</section>
+
+<section class="admin-section">
+  <h3>Публичная ссылка</h3>
+  <code class="public-url">{{ url_for('public.team_page', team_uuid=team.id, _external=True) }}</code>
+</section>
+
+<script>
+document.querySelectorAll('[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const name = btn.dataset.add;
+    const list = btn.previousElementSibling;
+    const input = document.createElement('input');
+    input.name = name;
+    input.placeholder = name === 'mentor_name' ? 'Имя наставника' : 'Имя участника';
+    list.appendChild(input);
+    input.focus();
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Дашборд — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Быстрое начисление</h2>
+  <form class="quick-score" method="post" action="{{ url_for('admin.score_create') }}">
+    <select name="team_id" required>
+      <option value="">— команда —</option>
+      {% for t in teams %}
+        <option value="{{ t.id }}">{{ t.name }}</option>
+      {% endfor %}
+    </select>
+    <input name="points" type="number" placeholder="±баллы" required step="1">
+    <input name="reason" type="text" placeholder="причина (свободный текст)">
+    <input name="event_date" type="date" value="{{ selected.isoformat() }}">
+    <button class="btn btn--primary" type="submit">Начислить</button>
+  </form>
+</section>
+
+<section class="admin-section">
+  <h2>Команды</h2>
+  <div class="teams-grid">
+    {% for t in teams %}
+    <div class="team-tile" style="--c: {{ t.color }}">
+      <div class="team-tile__head">
+        <div class="team-tile__name">{{ t.name }}</div>
+        <div class="team-tile__total">{{ '{0:+d}'.format(totals.get(t.id, 0)) if totals.get(t.id, 0) else 0 }}</div>
+      </div>
+      <div class="team-tile__color" style="background: {{ t.color }}"></div>
+      <div class="team-tile__actions">
+        <a class="btn btn--ghost" href="{{ url_for('admin.team_edit', team_id=t.id) }}">Изменить</a>
+        <a class="btn btn--ghost" target="_blank" href="{{ url_for('public.team_page', team_uuid=t.id) }}">Публичная ↗</a>
+      </div>
+      <div class="team-tile__url">
+        <code>{{ url_for('public.team_page', team_uuid=t.id, _external=True) }}</code>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
