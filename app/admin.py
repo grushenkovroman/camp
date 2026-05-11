@@ -10,7 +10,7 @@ from flask import (
     abort,
 )
 from flask_login import login_user, logout_user, login_required, current_user
-from sqlalchemy import select, func
+from sqlalchemy import select, func, delete
 
 from .db import SessionLocal
 from .models import Team, TeamMember, ScoreEvent, DailyTask
@@ -195,6 +195,34 @@ def score_delete(event_id):
 
 
 # --- daily task ---------------------------------------------------------
+
+@bp.route("/reset", methods=["GET", "POST"])
+@login_required
+def reset_scores():
+    db = SessionLocal()
+    try:
+        if request.method == "POST":
+            login_value = request.form.get("login", "").strip()
+            password = request.form.get("password", "")
+            if not verify_password(login_value, password):
+                flash("Неверный логин или пароль", "error")
+                return redirect(url_for("admin.reset_scores"))
+
+            total = db.execute(
+                select(func.count()).select_from(ScoreEvent)
+            ).scalar_one()
+            db.execute(delete(ScoreEvent))
+            db.commit()
+            flash(f"Сброшено: удалено {total} начислений", "ok")
+            return redirect(url_for("admin.dashboard"))
+
+        total = db.execute(
+            select(func.count()).select_from(ScoreEvent)
+        ).scalar_one()
+        return render_template("admin/reset.html", total=total)
+    finally:
+        db.close()
+
 
 @bp.route("/daily-task", methods=["GET", "POST"])
 @login_required

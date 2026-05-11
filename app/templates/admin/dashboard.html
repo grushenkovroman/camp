@@ -39,4 +39,9 @@
     {% endfor %}
   </div>
 </section>
+
+<section class="admin-section danger-zone">
+  <h2>Опасная зона</h2>
+  <a class="btn btn--danger" href="{{ url_for('admin.reset_scores') }}">Сбросить все начисления</a>
+</section>
 {% endblock %}

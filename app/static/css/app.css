@@ -362,3 +362,38 @@ body.admin { background: #050510; }
 .task-form textarea { width: 100%; resize: vertical; min-height: 160px; font-family: inherit; }
 .task-form__actions { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
 .task-form__actions small { opacity: 0.5; font-size: 12px; }
+
+/* danger zone */
+.btn--danger {
+  background: rgba(255,93,93,0.12);
+  border-color: rgba(255,93,93,0.5);
+  color: #ff5d5d;
+}
+.btn--danger:hover {
+  background: rgba(255,93,93,0.22);
+  border-color: rgba(255,93,93,0.8);
+  box-shadow: 0 0 18px rgba(255,93,93,0.4);
+}
+.danger-zone {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px dashed rgba(255,93,93,0.3);
+}
+.danger-zone h2 { color: #ff5d5d; }
+.danger-h2 { color: #ff5d5d; }
+.danger-box {
+  padding: 24px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,93,93,0.4);
+  background: rgba(255,93,93,0.04);
+  box-shadow: inset 0 0 32px rgba(255,93,93,0.05);
+}
+.danger-box p { line-height: 1.5; }
+.danger-box strong { color: #ff5d5d; }
+.reset-form { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin-top: 18px; }
+.reset-form label { display: flex; flex-direction: column; gap: 4px; }
+.reset-form label span {
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  opacity: 0.65; font-family: 'JetBrains Mono', monospace;
+}
+.reset-form__actions { display: flex; gap: 8px; margin-top: 8px; }

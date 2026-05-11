@@ -1,0 +1,28 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Сброс начислений — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <a class="back" href="{{ url_for('admin.dashboard') }}">← на дашборд</a>
+  <h2 class="danger-h2">⚠ Сброс начислений</h2>
+  <div class="danger-box">
+    <p>Будут удалены <strong>все начисления у всех команд</strong> ({{ total }} запис{% if total % 10 == 1 and total % 100 != 11 %}ь{% elif 2 <= total % 10 <= 4 and (total % 100 < 10 or total % 100 >= 20) %}и{% else %}ей{% endif %}).
+    Задания дня и команды не затрагиваются. Действие необратимо.</p>
+    <p>Подтвердите логином и паролем администратора.</p>
+    <form method="post" class="reset-form" onsubmit="return confirm('Точно сбросить ВСЕ начисления? Это необратимо.')">
+      <label>
+        <span>Логин</span>
+        <input name="login" autocomplete="off" required>
+      </label>
+      <label>
+        <span>Пароль</span>
+        <input name="password" type="password" autocomplete="off" required>
+      </label>
+      <div class="reset-form__actions">
+        <a class="btn btn--ghost" href="{{ url_for('admin.dashboard') }}">Отмена</a>
+        <button class="btn btn--danger" type="submit">Сбросить всё</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}
