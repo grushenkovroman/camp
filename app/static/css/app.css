@@ -397,3 +397,183 @@ body.admin { background: #050510; }
   opacity: 0.65; font-family: 'JetBrains Mono', monospace;
 }
 .reset-form__actions { display: flex; gap: 8px; margin-top: 8px; }
+
+/* ========== tabs (public) ========== */
+.tabs {
+  display: flex; gap: 4px; margin: 0 0 24px;
+  padding: 4px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; width: fit-content;
+}
+.tab {
+  padding: 8px 18px; border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  opacity: 0.6; transition: all 0.15s;
+}
+.tab:hover { opacity: 1; }
+.tab--active {
+  opacity: 1;
+  background: rgba(255,255,255,0.05);
+  color: var(--team-color);
+  text-shadow: 0 0 8px var(--team-color);
+  box-shadow: inset 0 0 12px rgba(255,255,255,0.04);
+}
+
+/* ========== timeline (public schedule) ========== */
+.timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.timeline__item {
+  display: grid;
+  grid-template-columns: 64px 40px 1fr;
+  gap: 12px; align-items: start;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+}
+.timeline__item--rotation {
+  border-left: 3px solid var(--team-color);
+}
+.timeline__time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; font-weight: 700;
+  color: var(--team-color);
+  text-shadow: 0 0 6px var(--team-color);
+}
+.timeline__icon { font-size: 22px; text-align: center; }
+.timeline__body { display: flex; flex-direction: column; gap: 2px; }
+.timeline__title { font-size: 16px; font-weight: 600; }
+.timeline__place { font-size: 13px; opacity: 0.75; font-family: 'JetBrains Mono', monospace; }
+.timeline__desc { font-size: 13px; opacity: 0.55; }
+@media (max-width: 480px) {
+  .timeline__item { grid-template-columns: 56px 32px 1fr; gap: 10px; padding: 10px 12px; }
+  .timeline__time { font-size: 14px; }
+}
+
+/* ========== admin: shift form / hint ========== */
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  max-width: 700px;
+}
+.form-grid label { display: flex; flex-direction: column; gap: 4px; }
+.form-grid label.full { grid-column: 1 / -1; }
+.form-grid label span {
+  font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; opacity: 0.65;
+  font-family: 'JetBrains Mono', monospace;
+}
+.form-grid__actions { grid-column: 1 / -1; }
+
+.hint {
+  margin-top: 24px; padding: 16px;
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 8px;
+  font-size: 13px; opacity: 0.75;
+}
+.hint h3 { margin: 0 0 8px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7; }
+.day-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px; }
+.day-list code { padding: 2px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; }
+
+/* ========== admin: activity rows ========== */
+.activity-list { display: flex; flex-direction: column; gap: 6px; margin-top: 16px; }
+.activity-row {
+  display: flex; gap: 6px; align-items: center;
+}
+.activity-form { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; align-items: center; }
+.activity-form .ic { width: 56px; }
+.activity-form .nm { min-width: 160px; }
+.activity-form .ds { flex: 1; min-width: 220px; }
+.activity-form .pl { min-width: 160px; }
+
+/* ========== admin: schedule blocks ========== */
+.add-form summary {
+  cursor: pointer; padding: 12px 16px;
+  background: rgba(0,255,225,0.08);
+  border: 1px solid rgba(0,255,225,0.3);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #00ffe1; margin-bottom: 16px;
+}
+.add-form[open] summary { margin-bottom: 8px; }
+
+.block-list { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; }
+.block-form {
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.block-form .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.block-form label { display: flex; flex-direction: column; gap: 4px; }
+.block-form label.grow { flex: 1; }
+.block-form label.full { width: 100%; }
+.block-form label span {
+  font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; opacity: 0.55;
+  font-family: 'JetBrains Mono', monospace;
+}
+.active-days {
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: center;
+  font-size: 13px;
+}
+.active-days .lbl {
+  font-size: 10px; letter-spacing: 0.14em; opacity: 0.55;
+  font-family: 'JetBrains Mono', monospace; text-transform: uppercase;
+  margin-right: 8px;
+}
+.chk {
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 8px; border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+}
+.chk input { margin: 0; }
+.chk:has(input:checked) { background: rgba(0,255,225,0.10); border-color: rgba(0,255,225,0.4); }
+.block-form .actions { display: flex; gap: 6px; }
+.block-delete {
+  display: flex; justify-content: flex-end;
+  margin-top: -4px; margin-bottom: 8px;
+}
+
+/* ========== admin: rotation grid ========== */
+.day-tabs {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  padding: 4px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; width: fit-content;
+  margin-bottom: 16px;
+}
+.day-tab {
+  padding: 6px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  border-radius: 4px; opacity: 0.6;
+}
+.day-tab:hover { opacity: 1; }
+.day-tab--active {
+  background: rgba(0,255,225,0.12);
+  color: #00ffe1; opacity: 1;
+  text-shadow: 0 0 8px #00ffe1;
+}
+.rotation-table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; overflow: hidden;
+}
+.rotation-table th, .rotation-table td {
+  padding: 8px 12px; text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.rotation-table th {
+  background: rgba(255,255,255,0.04); font-size: 11px;
+  letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.7;
+  font-family: 'JetBrains Mono', monospace;
+}
+.rotation-table tr:last-child td { border-bottom: none; }
+.rotation-table select { width: 100%; min-width: 180px; }
+.rotation-form__actions { margin-top: 16px; }

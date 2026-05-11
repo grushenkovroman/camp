@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} — расписание{% endblock %}
+{% block body_class %}public{% endblock %}
+{% block body_style %}--team-color: {{ team.color }};{% endblock %}
+
+{% block content %}
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<main class="team-page">
+  <header class="team-head">
+    <div class="team-head__chip">КОМАНДА</div>
+    <h1 class="team-head__name glow">{{ team.name }}</h1>
+  </header>
+
+  <nav class="tabs">
+    <a class="tab" href="{{ url_for('public.team_page', team_uuid=team.id) }}">Баллы</a>
+    <a class="tab tab--active" href="{{ url_for('public.team_schedule', team_uuid=team.id) }}">Расписание</a>
+  </nav>
+
+  <section class="date-bar">
+    <a class="date-arrow" href="?date={{ prev_date.isoformat() }}" title="предыдущий день">◀</a>
+    <div class="date-bar__center">
+      <div class="date-bar__date glow">{{ selected.strftime('%d.%m.%Y') }}</div>
+      <div class="date-bar__sub">
+        {% if day_label_text %}{{ day_label_text }}{% elif selected == today %}сегодня{% else %}{{ selected.strftime('%A') }}{% endif %}
+      </div>
+    </div>
+    <a class="date-arrow" href="?date={{ next_date.isoformat() }}" title="следующий день">▶</a>
+  </section>
+
+  {% if not in_shift %}
+  <section class="card">
+    <div class="empty">эта дата вне смены</div>
+  </section>
+  {% elif items %}
+  <section class="card">
+    <div class="card__title">РАСПИСАНИЕ</div>
+    <ul class="timeline">
+      {% for it in items %}
+      <li class="timeline__item {% if it.is_rotation %}timeline__item--rotation{% endif %}">
+        <div class="timeline__time">{{ it.time.strftime('%H:%M') }}</div>
+        <div class="timeline__icon">{{ it.icon or '·' }}</div>
+        <div class="timeline__body">
+          <div class="timeline__title">{{ it.title }}</div>
+          {% if it.place %}<div class="timeline__place">{{ it.place }}</div>{% endif %}
+          {% if it.description %}<div class="timeline__desc">{{ it.description }}</div>{% endif %}
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% else %}
+  <section class="card">
+    <div class="empty">на этот день расписания нет</div>
+  </section>
+  {% endif %}
+</main>
+{% endblock %}

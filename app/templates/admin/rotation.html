@@ -1,0 +1,57 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Ротация — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Ротация — {{ day_label_text or ('день ' ~ day) }}</h2>
+
+  <div class="day-tabs">
+    {% for i in range(total_days) %}
+    <a href="{{ url_for('admin.rotation_grid', day=i) }}"
+       class="day-tab {% if i == day %}day-tab--active{% endif %}">
+      {% if i == 0 %}заезд
+      {% elif i == total_days - 1 %}выезд
+      {% else %}{{ i }}
+      {% endif %}
+    </a>
+    {% endfor %}
+  </div>
+
+  <form method="post" class="rotation-form">
+    <input type="hidden" name="day_index" value="{{ day }}">
+    <table class="rotation-table">
+      <thead>
+        <tr>
+          <th>Команда</th>
+          {% for st in slot_times %}<th>{{ st }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in teams %}
+        <tr>
+          <td>
+            <span class="dot" style="background: {{ t.color }}"></span>
+            {{ t.name }}
+          </td>
+          {% for slot in range(3) %}
+          <td>
+            <select name="slot_{{ t.id }}_{{ slot }}">
+              <option value="">—</option>
+              {% for a in activities %}
+              <option value="{{ a.id }}" {% if current.get((t.id, slot)) == a.id %}selected{% endif %}>
+                {{ a.icon }} {{ a.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="rotation-form__actions">
+      <button class="btn btn--primary" type="submit">Сохранить ротацию на этот день</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

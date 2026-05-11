@@ -17,6 +17,11 @@
     </div>
   </header>
 
+  <nav class="tabs">
+    <a class="tab tab--active" href="{{ url_for('public.team_page', team_uuid=team.id) }}">Баллы</a>
+    <a class="tab" href="{{ url_for('public.team_schedule', team_uuid=team.id) }}">Расписание</a>
+  </nav>
+
   <section class="date-bar">
     <a class="date-arrow" href="?date={{ prev_date.isoformat() }}" title="предыдущий день">◀</a>
     <div class="date-bar__center">

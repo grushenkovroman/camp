@@ -1,0 +1,36 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Смена — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Параметры смены</h2>
+  <form method="post" class="form-grid">
+    <label>
+      <span>Дата начала (День заезда)</span>
+      <input type="date" name="start_date" value="{{ shift.start_date.isoformat() if shift else '2026-05-11' }}" required>
+    </label>
+    <label>
+      <span>Всего дней (включая заезд и выезд)</span>
+      <input type="number" name="total_days" min="2" max="30" value="{{ shift.total_days if shift else 8 }}" required>
+    </label>
+    <label class="full">
+      <span>Название смены</span>
+      <input type="text" name="name" value="{{ shift.name if shift else '' }}" placeholder="например, Путь надежды">
+    </label>
+    <div class="form-grid__actions">
+      <button class="btn btn--primary" type="submit">Сохранить</button>
+    </div>
+  </form>
+
+  {% if days_preview %}
+  <div class="hint">
+    <h3>Метки дней</h3>
+    <ul class="day-list">
+      {% for i, d, label in days_preview %}
+      <li><code>{{ d.strftime('%d.%m.%Y') }}</code> — <strong>{{ label }}</strong></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

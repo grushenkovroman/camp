@@ -1,0 +1,37 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Активности — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Активности (каталог для ротации)</h2>
+
+  <form class="quick-score" method="post" action="{{ url_for('admin.activity_create') }}">
+    <input name="icon" placeholder="🎲" maxlength="4" style="width:60px">
+    <input name="name" placeholder="Название" required style="min-width:180px">
+    <input name="description" placeholder="Описание" style="flex:1; min-width:200px">
+    <input name="place" placeholder="Место (корпус, каб.)">
+    <button class="btn btn--primary" type="submit">Добавить</button>
+  </form>
+
+  {% if items %}
+  <div class="activity-list">
+    {% for a in items %}
+    <div class="activity-row">
+      <form method="post" action="{{ url_for('admin.activity_update', item_id=a.id) }}" class="activity-form">
+        <input name="icon" value="{{ a.icon }}" maxlength="4" class="ic">
+        <input name="name" value="{{ a.name }}" required class="nm">
+        <input name="description" value="{{ a.description }}" class="ds">
+        <input name="place" value="{{ a.place }}" class="pl">
+        <button class="btn btn--small" type="submit">Сохранить</button>
+      </form>
+      <form method="post" action="{{ url_for('admin.activity_delete', item_id=a.id) }}" onsubmit="return confirm('Удалить «{{ a.name }}»? Ротация со ссылкой на эту активность очистится.')">
+        <button class="btn btn--small btn--danger" type="submit">×</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">список пуст</div>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Расписание — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Универсальное расписание (блоки)</h2>
+  <p class="hint">
+    «Слоты ротации» (10:00/11:00/12:00) показываются на странице команды как её активность из ротации.
+    Чтобы блок виден был только у одной команды (например, особое расписание К0) — выберите её в «Только для команды».
+  </p>
+
+  <details open class="add-form">
+    <summary>+ Добавить блок</summary>
+    <form method="post" action="{{ url_for('admin.schedule_create') }}" class="block-form">
+      <div class="row">
+        <label><span>Время</span><input type="time" name="block_time" required></label>
+        <label><span>Иконка</span><input name="icon" maxlength="4" placeholder="⚡"></label>
+        <label class="grow"><span>Название</span><input name="title" required></label>
+      </div>
+      <label class="full"><span>Описание</span><input name="description"></label>
+      <div class="row">
+        <label>
+          <span>Тип</span>
+          <select name="kind">
+            <option value="fixed">обычный</option>
+            <option value="rotation">слот ротации</option>
+          </select>
+        </label>
+        <label>
+          <span>Слот #</span>
+          <select name="rotation_slot">
+            <option value="">—</option>
+            <option value="0">0 (10:00)</option>
+            <option value="1">1 (11:00)</option>
+            <option value="2">2 (12:00)</option>
+          </select>
+        </label>
+        <label class="grow">
+          <span>Только для команды</span>
+          <select name="only_for_team_id">
+            <option value="">все команды</option>
+            {% for t in teams %}<option value="{{ t.id }}">{{ t.name }}</option>{% endfor %}
+          </select>
+        </label>
+      </div>
+      <div class="active-days">
+        <span class="lbl">Активно в дни:</span>
+        {% for i in range(day_count) %}
+        <label class="chk">
+          <input type="checkbox" name="active_days" value="{{ i }}" checked>
+          <span>{% if i == 0 %}заезд{% elif i == day_count - 1 %}выезд{% else %}{{ i }}{% endif %}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <div class="actions">
+        <button class="btn btn--primary" type="submit">Добавить</button>
+      </div>
+    </form>
+  </details>
+
+  <div class="block-list">
+    {% for b in items %}
+    <form method="post" action="{{ url_for('admin.schedule_update', item_id=b.id) }}" class="block-form block-form--edit">
+      <div class="row">
+        <label><span>Время</span><input type="time" name="block_time" value="{{ b.block_time.strftime('%H:%M') }}" required></label>
+        <label><span>Иконка</span><input name="icon" value="{{ b.icon }}" maxlength="4"></label>
+        <label class="grow"><span>Название</span><input name="title" value="{{ b.title }}" required></label>
+      </div>
+      <label class="full"><span>Описание</span><input name="description" value="{{ b.description }}"></label>
+      <div class="row">
+        <label>
+          <span>Тип</span>
+          <select name="kind">
+            <option value="fixed" {% if b.kind == 'fixed' %}selected{% endif %}>обычный</option>
+            <option value="rotation" {% if b.kind == 'rotation' %}selected{% endif %}>слот ротации</option>
+          </select>
+        </label>
+        <label>
+          <span>Слот #</span>
+          <select name="rotation_slot">
+            <option value="" {% if b.rotation_slot is none %}selected{% endif %}>—</option>
+            <option value="0" {% if b.rotation_slot == 0 %}selected{% endif %}>0 (10:00)</option>
+            <option value="1" {% if b.rotation_slot == 1 %}selected{% endif %}>1 (11:00)</option>
+            <option value="2" {% if b.rotation_slot == 2 %}selected{% endif %}>2 (12:00)</option>
+          </select>
+        </label>
+        <label class="grow">
+          <span>Только для команды</span>
+          <select name="only_for_team_id">
+            <option value="">все команды</option>
+            {% for t in teams %}
+            <option value="{{ t.id }}" {% if b.only_for_team_id == t.id %}selected{% endif %}>{{ t.name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+      <div class="active-days">
+        <span class="lbl">Активно в дни:</span>
+        {% for i in range(day_count) %}
+        <label class="chk">
+          <input type="checkbox" name="active_days" value="{{ i }}" {% if i in b.active_days %}checked{% endif %}>
+          <span>{% if i == 0 %}заезд{% elif i == day_count - 1 %}выезд{% else %}{{ i }}{% endif %}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <div class="actions">
+        <button class="btn btn--small" type="submit">Сохранить</button>
+      </div>
+    </form>
+    <form method="post" action="{{ url_for('admin.schedule_delete', item_id=b.id) }}" onsubmit="return confirm('Удалить блок «{{ b.title }}»?')" class="block-delete">
+      <button class="btn btn--small btn--danger" type="submit">Удалить блок</button>
+    </form>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
