@@ -446,9 +446,54 @@ body.admin { background: #050510; }
 .timeline__title { font-size: 16px; font-weight: 600; }
 .timeline__place { font-size: 13px; opacity: 0.75; font-family: 'JetBrains Mono', monospace; }
 .timeline__desc { font-size: 13px; opacity: 0.55; }
+.timeline__item--past {
+  opacity: 0.35;
+}
+.timeline__item--past .timeline__time { text-shadow: none; }
+
+/* "Сейчас" — отсечка текущего времени */
+.timeline__now {
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px auto 1fr;
+  gap: 12px; align-items: center;
+  padding: 6px 16px;
+  margin: 2px 0;
+  list-style: none;
+}
+.timeline__now-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px; font-weight: 800;
+  color: var(--team-color);
+  text-shadow: 0 0 12px var(--team-color), 0 0 24px var(--team-color);
+  line-height: 1;
+}
+.timeline__now-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--team-color);
+  opacity: 0.85;
+  white-space: nowrap;
+}
+.timeline__now-line {
+  height: 2px;
+  background: linear-gradient(90deg, var(--team-color) 0%, var(--team-color) 30%, transparent 100%);
+  border-radius: 1px;
+  box-shadow: 0 0 12px var(--team-color);
+  animation: now-pulse 2.4s ease-in-out infinite;
+}
+@keyframes now-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
 @media (max-width: 480px) {
   .timeline__item { grid-template-columns: 56px 32px 1fr; gap: 10px; padding: 10px 12px; }
   .timeline__time { font-size: 14px; }
+  .timeline__now { grid-template-columns: 56px auto 1fr; padding: 4px 12px; gap: 10px; }
+  .timeline__now-time { font-size: 18px; }
+  .timeline__now-label { font-size: 9px; letter-spacing: 0.2em; }
 }
 
 /* ========== admin: shift form / hint ========== */

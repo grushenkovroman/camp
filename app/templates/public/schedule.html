@@ -36,9 +36,17 @@
   {% elif items %}
   <section class="card">
     <div class="card__title">РАСПИСАНИЕ</div>
-    <ul class="timeline">
+    <ul class="timeline" data-has-now="{{ '1' if now_time else '0' }}">
       {% for it in items %}
-      <li class="timeline__item {% if it.is_rotation %}timeline__item--rotation{% endif %}">
+      {% if now_time and loop.index0 == now_index %}
+      <li class="timeline__now" data-now>
+        <div class="timeline__now-time" data-now-time>{{ now_time.strftime('%H:%M') }}</div>
+        <div class="timeline__now-label">сейчас</div>
+        <div class="timeline__now-line"></div>
+      </li>
+      {% endif %}
+      <li class="timeline__item {% if it.is_rotation %}timeline__item--rotation{% endif %} {% if now_time and loop.index0 < now_index %}timeline__item--past{% endif %}"
+          data-time="{{ it.time.strftime('%H:%M') }}">
         <div class="timeline__time">{{ it.time.strftime('%H:%M') }}</div>
         <div class="timeline__icon">{{ it.icon or '·' }}</div>
         <div class="timeline__body">
@@ -47,9 +55,63 @@
           {% if it.description %}<div class="timeline__desc">{{ it.description }}</div>{% endif %}
         </div>
       </li>
+      {% if now_time and loop.last and now_index >= loop.length %}
+      <li class="timeline__now" data-now>
+        <div class="timeline__now-time" data-now-time>{{ now_time.strftime('%H:%M') }}</div>
+        <div class="timeline__now-label">сейчас (день закончился)</div>
+        <div class="timeline__now-line"></div>
+      </li>
+      {% endif %}
       {% endfor %}
     </ul>
   </section>
+  {% if now_time %}
+  <script>
+  (function () {
+    const tl = document.querySelector('.timeline[data-has-now="1"]');
+    if (!tl) return;
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Moscow', hour: '2-digit', minute: '2-digit', hour12: false
+    });
+    function mskMinutes() {
+      const p = fmt.formatToParts(new Date());
+      const h = +p.find(x => x.type === 'hour').value;
+      const m = +p.find(x => x.type === 'minute').value;
+      return [h, m, h * 60 + m];
+    }
+    function toMin(hhmm) {
+      const [h, m] = hhmm.split(':').map(Number);
+      return h * 60 + m;
+    }
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tick() {
+      const marker = tl.querySelector('.timeline__now');
+      if (!marker) return;
+      const [h, m, nowMin] = mskMinutes();
+      const items = Array.from(tl.querySelectorAll('.timeline__item'));
+      // remove past flag — re-apply below
+      items.forEach(it => it.classList.remove('timeline__item--past'));
+      // find insertion point
+      let inserted = false;
+      for (const it of items) {
+        const t = it.dataset.time;
+        if (!t) continue;
+        if (toMin(t) > nowMin) {
+          tl.insertBefore(marker, it);
+          inserted = true;
+          break;
+        } else {
+          it.classList.add('timeline__item--past');
+        }
+      }
+      if (!inserted) tl.appendChild(marker);
+      marker.querySelector('[data-now-time]').textContent = pad(h) + ':' + pad(m);
+    }
+    tick();
+    setInterval(tick, 60_000);
+  })();
+  </script>
+  {% endif %}
   {% else %}
   <section class="card">
     <div class="empty">на этот день расписания нет</div>

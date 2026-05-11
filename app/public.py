@@ -1,4 +1,6 @@
 import uuid
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from flask import Blueprint, render_template, abort, request
 from sqlalchemy import select, func, or_, and_
 
@@ -13,6 +15,7 @@ from .models import (
     Activity,
 )
 from .utils import today_local, parse_date, shift_date, day_index, day_label
+from .config import Config
 
 bp = Blueprint("public", __name__)
 
@@ -141,6 +144,19 @@ def team_schedule(team_uuid: uuid.UUID):
                         "is_rotation": False,
                     })
 
+        # отсечка "сейчас" — только если открыт сегодняшний день
+        now_time = None
+        now_index = None
+        if selected == today_local():
+            now_time = datetime.now(ZoneInfo(Config.TZ)).time().replace(second=0, microsecond=0)
+            # позиция: индекс первого блока, чьё время > now
+            for i, it in enumerate(items):
+                if it["time"] > now_time:
+                    now_index = i
+                    break
+            if now_index is None and items:
+                now_index = len(items)  # маркер ниже последнего блока
+
         return render_template(
             "public/schedule.html",
             team=team,
@@ -151,6 +167,8 @@ def team_schedule(team_uuid: uuid.UUID):
             day_label_text=d_label,
             items=items,
             in_shift=(d_idx is not None),
+            now_time=now_time,
+            now_index=now_index,
         )
     finally:
         db.close()
