@@ -44,7 +44,7 @@ M1_H = 58*mm    # module 01 (3 items)
 M2_H = 66*mm    # module 02 (4 items)
 M3_H = 58*mm    # module 03 (3 items)
 
-BINARY_Y    = H - 57*mm          # binary strip text baseline
+BINARY_Y    = H - 64*mm          # binary strip text baseline (shifted for 2-line title)
 
 M1_TOP      = BINARY_Y - 9*mm    # 9mm gap below binary
 M1_Y        = M1_TOP - M1_H      # bottom of module 01
@@ -167,10 +167,9 @@ def token_bar(c, x, y, w, loss, gain):
     c.setFillColor(GREEN)
     c.drawRightString(x+w-10, y+5.5, f'БЕЗУПРЕЧНОСТЬ: {gain}  [+]')
 
-def draw_module(c, mx, my, mh, mw, color, header_label, directive, items, loss, gain):
+def draw_module(c, mx, my, mh, mw, color, header_label, directive, items):
     """Draw a module box with word-wrap and vertical centering."""
     glow_box(c, mx, my, mw, mh, color, PANEL)
-    token_bar(c, mx, my, mw, loss, gain)
 
     # Header bar at top
     hbar_y = my + mh - 22
@@ -182,10 +181,10 @@ def draw_module(c, mx, my, mh, mw, color, header_label, directive, items, loss, 
     c.drawString(mx+13, hbar_y+7, header_label)
 
     # Pre-wrap every item
-    ISIZE  = 9.5          # item font size
-    ILH    = ISIZE + 4    # inter-line height within one item (13.5 pt)
+    ISIZE  = 10           # item font size
+    ILH    = ISIZE + 4    # inter-line height within one item (14 pt)
     IGAP   = 6            # gap between separate items
-    NUM_W  = 27           # horizontal offset for text after "01."
+    NUM_W  = 24           # horizontal offset for text after "01."
     avail_text_w = mw - 10 - NUM_W
 
     wrapped = []          # list of (num, lines, block_h)
@@ -200,11 +199,11 @@ def draw_module(c, mx, my, mh, mw, color, header_label, directive, items, loss, 
     sep_block_h   = 8 + 1 + 7 + 8.5
     content_h     = items_stack_h + sep_block_h
 
-    available = mh - 22 - 17
+    available = mh - 22
     v_offset  = max(8, (available - content_h) // 2)
 
     # Draw items bottom-up
-    cur_y = my + 17 + v_offset   # baseline of bottom line of lowest item
+    cur_y = my + v_offset   # baseline of bottom line of lowest item
     for num, lines, block_h in reversed(wrapped):
         n = len(lines)
         # lines[0] is top line → drawn at cur_y + (n-1)*ILH
@@ -257,25 +256,36 @@ def generate(output_path):
     c.setFillColor(DIM2)
     c.drawRightString(CX+CW-8, H-13.5*mm+4, 'BASE-4:12 // REV 2.0')
 
-    # ── TITLE ────────────────────────────────────────────────────────
-    ty = H - 30*mm
+    # ── TITLE LINE 1: УСТАВ КИБЕР-АГЕНТА ────────────────────────────
+    ty = H - 29*mm
     for i in range(5, 0, -1):
         c.setFillColor(colors.Color(0.0, 0.9, 1.0, 0.04*i))
         c.setFont('MB', 33)
-        c.drawCentredString(W/2, ty + i*0.5, 'КОДЕКС БАЗЫ 4:12')
+        c.drawCentredString(W/2, ty + i*0.5, 'УСТАВ КИБЕР-АГЕНТА')
     c.setFillColor(CYAN)
     c.setFont('MB', 33)
-    c.drawCentredString(W/2, ty, 'КОДЕКС БАЗЫ 4:12')
+    c.drawCentredString(W/2, ty, 'УСТАВ КИБЕР-АГЕНТА')
 
+    # ── TITLE LINE 2: БАЗА 4:12 (smaller, subtler) ───────────────────
+    ty2 = H - 40*mm
+    for i in range(3, 0, -1):
+        c.setFillColor(colors.Color(0.0, 0.9, 1.0, 0.035*i))
+        c.setFont('MB', 20)
+        c.drawCentredString(W/2, ty2 + i*0.3, 'БАЗА  4:12')
+    c.setFillColor(colors.Color(0.0, 0.9, 1.0, 0.72))
+    c.setFont('MB', 20)
+    c.drawCentredString(W/2, ty2, 'БАЗА  4:12')
+
+    # ── SUBTITLE ─────────────────────────────────────────────────────
     c.setFillColor(DIM2)
     c.setFont('M', 9.5)
-    c.drawCentredString(W/2, H-38*mm, '─ ─ ─   ПРОТОКОЛ АКТИВАЦИИ КИБЕР-АГЕНТА   ─ ─ ─')
+    c.drawCentredString(W/2, H-47*mm, '─ ─ ─   ПРОТОКОЛ АКТИВАЦИИ КИБЕР-АГЕНТА   ─ ─ ─')
 
-    rule_dots(c, CX, H-43.5*mm, CW, CYAN)
+    rule_dots(c, CX, H-52.5*mm, CW, CYAN)
 
     c.setFillColor(YELLOW)
     c.setFont('MI', 10)
-    c.drawCentredString(W/2, H-50*mm, '" Помни, Кайрос наблюдает за тобой... "')
+    c.drawCentredString(W/2, H-58*mm, '" Помни, Кайрос наблюдает за тобой... "')
 
     # Binary strip
     c.setFillColor(colors.Color(0.0, 0.9, 1.0, 0.28))
@@ -291,19 +301,19 @@ def generate(output_path):
                     (2, 'Держи спальное место в идеальном порядке: одежда сложена, вещи не разбросаны.'),
                     (3, 'Соблюдай чистоту на всей территории базы: сразу убирай мусор.'),
                 ],
-                '−2 ТОКЕНА', '+2 ТОКЕНА')
+                )
 
     # ── MODULE 02 ────────────────────────────────────────────────────
     draw_module(c, CX, M2_Y, M2_H, CW, CYAN,
                 '[МОДУЛЬ 02]  ПРОТОКОЛ СУБОРДИНАЦИИ',
                 'Цепочка команд не обсуждается — она выполняется',
                 [
-                    (4, 'В присутствии Кайроса — строгое молчание, говори только по разрешению.'),
-                    (5, 'Слушайся своих навигаторов без возражений — их слово есть команда базы.'),
+                    (4, 'Во время утреннего и вечернего форума соблюдай тишину: говори только с разрешения.'),
+                    (5, 'Слушайся навигаторов: они несут ответственность за весь кибер-отряд, а их слово для тебя — закон.'),
                     (6, 'Будь пунктуален: опоздание — это сбой, который роняет рейтинг всего кибер-отряда.'),
                     (7, 'На сборах и построениях занимай своё место, внимательно слушай команды.'),
                 ],
-                '−3 ТОКЕНА', '+3 ТОКЕНА')
+                )
 
     # ── MODULE 03 ────────────────────────────────────────────────────
     draw_module(c, CX, M3_Y, M3_H, CW, ORANGE,
@@ -312,9 +322,9 @@ def generate(output_path):
                 [
                     (8,  'Никаких конфликтов, грубых слов и физических столкновений.'),
                     (9,  'Поддерживай товарищей, защищай слабых, береги кибер-отряд.'),
-                    (10, 'В ночное время и дневной сон — тишина. Уважение к отдыху других — это уважение к миссии.'),
+                    (10, 'Во время ночного и дневного сна соблюдай тишину. Уважение к отдыху других — это уважение к миссии.'),
                 ],
-                '−2 ТОКЕНА', '+5 ТОКЕНОВ')
+                )
 
     # ── FOOTER ───────────────────────────────────────────────────────
     rule_dots(c, CX, FSEP_Y, CW, CYAN)

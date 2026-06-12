@@ -273,6 +273,12 @@ body.public .bg-glow {
   color: #00e5ff;
   text-shadow: 0 0 10px #00e5ff, 0 0 32px rgba(0,229,255,0.6);
 }
+.kodeks__title2 {
+  text-align: center; margin-top: 6px;
+  font-size: clamp(16px, 3.5vw, 26px); font-weight: 800; letter-spacing: 0.22em;
+  color: rgba(0,229,255,0.72);
+  text-shadow: 0 0 8px rgba(0,229,255,0.4);
+}
 .kodeks__sub {
   text-align: center; margin-top: 8px;
   font-size: 12px; letter-spacing: 0.18em; color: #404870;
