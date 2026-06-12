@@ -167,6 +167,31 @@ body.public .bg-glow {
   font-size: 18px; line-height: 1.5; white-space: pre-wrap;
 }
 
+/* rank card */
+.rank-card__main {
+  display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap;
+}
+.rank-card__place { display: flex; align-items: baseline; gap: 10px; }
+.rank-card__num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 56px; font-weight: 800; line-height: 1;
+}
+.rank-card__of {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px; font-weight: 700; opacity: 0.55;
+}
+.rank-card__caption { font-size: 14px; opacity: 0.7; max-width: 260px; }
+.rank-card__tied {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px dashed rgba(255,255,255,0.12);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; letter-spacing: 0.04em; opacity: 0.75;
+}
+@media (max-width: 480px) {
+  .rank-card__num { font-size: 44px; }
+  .rank-card__of { font-size: 17px; }
+}
+
 .score-card__head {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: 16px; margin-bottom: 14px;

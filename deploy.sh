@@ -3,8 +3,8 @@
 # Использование: ./deploy.sh
 set -euo pipefail
 
-REMOTE_USER="grushenkov"
-REMOTE_HOST="84.22.133.11"
+REMOTE_USER="root"
+REMOTE_HOST="201.51.5.119"
 REMOTE_PATH="/home/grushenkov/projects/camp-program"
 SERVICE_NAME="camp-rasti"
 
@@ -13,7 +13,8 @@ rsync -av --delete \
   --exclude '.venv' \
   --exclude '__pycache__' \
   --exclude '.git' \
-  --exclude '.env' \
+  --exclude '.env*' \
+  --exclude '.claude' \
   --exclude '*.pyc' \
   --exclude '.DS_Store' \
   ./ "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/"

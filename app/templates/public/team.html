@@ -22,6 +22,20 @@
     <a class="tab" href="{{ url_for('public.team_schedule', team_uuid=team.id) }}">Расписание</a>
   </nav>
 
+  <section class="card rank-card">
+    <div class="card__title">РЕЙТИНГ</div>
+    <div class="rank-card__main">
+      <div class="rank-card__place">
+        <span class="rank-card__num glow">{{ rank_place }}</span>
+        <span class="rank-card__of">из {{ teams_count }}</span>
+      </div>
+      <div class="rank-card__caption">место вашей команды по баллам за всю смену</div>
+    </div>
+    {% if rank_tied %}
+    <div class="rank-card__tied">столько же баллов ещё у {{ rank_tied }} команд{{ 'ы' if rank_tied == 1 else '' }}</div>
+    {% endif %}
+  </section>
+
   <section class="date-bar">
     <a class="date-arrow" href="?date={{ prev_date.isoformat() }}" title="предыдущий день">◀</a>
     <div class="date-bar__center">

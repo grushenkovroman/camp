@@ -44,6 +44,17 @@ def team_page(team_uuid: uuid.UUID):
             )
         ).scalar_one()
 
+        # рейтинг за всю смену: место по баллам среди всех команд,
+        # равные суммы делят одно место (1 + число команд со строго большей суммой)
+        totals = db.execute(
+            select(Team.id, func.coalesce(func.sum(ScoreEvent.points), 0).label("total"))
+            .outerjoin(ScoreEvent, ScoreEvent.team_id == Team.id)
+            .group_by(Team.id)
+        ).all()
+        teams_count = len(totals)
+        rank_place = 1 + sum(1 for _, t in totals if t > total_all)
+        rank_tied = sum(1 for tid, t in totals if t == total_all and tid != team.id)
+
         task = db.get(DailyTask, selected)
 
         members = [m for m in team.members if m.role == "member"]
@@ -59,6 +70,9 @@ def team_page(team_uuid: uuid.UUID):
             events=events_today,
             total_today=total_today,
             total_all=total_all,
+            rank_place=rank_place,
+            rank_tied=rank_tied,
+            teams_count=teams_count,
             task=task,
             members=members,
             mentors=mentors,
