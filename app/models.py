@@ -155,6 +155,10 @@ class ScheduleBlock(Base):
     kind: Mapped[str] = mapped_column(
         Enum("fixed", "rotation", name="block_kind"), default="fixed", nullable=False
     )
+    # чек-ап: время блока подменяется на teams.checkup_time команды (если задано)
+    is_checkup: Mapped[bool] = mapped_column(
+        Boolean, default=False, nullable=False, server_default="false"
+    )
     rotation_slot: Mapped[int | None] = mapped_column(Integer, nullable=True)
     only_for_team_id: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True),

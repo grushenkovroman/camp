@@ -147,14 +147,22 @@ def team_schedule(team_uuid: uuid.UUID):
                             "is_rotation": True,
                         })
                 else:
+                    block_time = b.block_time
+                    # чек-ап: у каждой команды своё время (из настроек чек-апа);
+                    # если время команде не задано — время блока по умолчанию
+                    if b.is_checkup and team.checkup_time:
+                        block_time = team.checkup_time
                     items.append({
-                        "time": b.block_time,
+                        "time": block_time,
                         "icon": b.icon,
                         "title": b.title,
                         "description": b.description,
                         "place": "",
                         "is_rotation": False,
                     })
+
+            # подменённое время чек-апа могло нарушить порядок — сортируем
+            items.sort(key=lambda it: it["time"])
 
         # отсечка "сейчас" — только если открыт сегодняшний день
         now_time = None

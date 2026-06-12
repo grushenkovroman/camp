@@ -41,6 +41,9 @@ def create_schema():
         conn.execute(text(
             "ALTER TABLE daily_tasks ADD COLUMN IF NOT EXISTS feature TEXT NOT NULL DEFAULT ''"
         ))
+        conn.execute(text(
+            "ALTER TABLE schedule_blocks ADD COLUMN IF NOT EXISTS is_checkup BOOLEAN NOT NULL DEFAULT FALSE"
+        ))
         conn.commit()
     print("  ok")
 
