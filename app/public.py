@@ -56,8 +56,6 @@ def team_page(team_uuid: uuid.UUID):
         rank_place = 1 + sum(1 for _, t in totals if t > total_all)
         rank_tied = sum(1 for tid, t in totals if t == total_all and tid != team.id)
 
-        task = db.get(DailyTask, selected)
-
         members = [m for m in team.members if m.role == "member"]
         mentors = [m for m in team.members if m.role == "mentor"]
 
@@ -74,7 +72,6 @@ def team_page(team_uuid: uuid.UUID):
             rank_place=rank_place,
             rank_tied=rank_tied,
             teams_count=teams_count,
-            task=task,
             members=members,
             mentors=mentors,
         )
@@ -184,6 +181,36 @@ def team_schedule(team_uuid: uuid.UUID):
             in_shift=(d_idx is not None),
             now_time=now_time,
             now_index=now_index,
+        )
+    finally:
+        db.close()
+
+
+@bp.get("/<uuid:team_uuid>/day")
+def team_day(team_uuid: uuid.UUID):
+    db = SessionLocal()
+    try:
+        team = db.get(Team, team_uuid)
+        if not team:
+            abort(404)
+
+        selected = parse_date(request.args.get("date")) or today_local()
+        task = db.get(DailyTask, selected)
+
+        shift = db.get(Shift, 1)
+        d_idx = day_index(shift, selected) if shift else None
+        d_label = day_label(shift, selected) if shift else None
+
+        return render_template(
+            "public/day.html",
+            team=team,
+            selected=selected,
+            prev_date=shift_date(selected, -1),
+            next_date=shift_date(selected, 1),
+            today=today_local(),
+            day_label_text=d_label,
+            task=task,
+            is_arrival_day=(d_idx == 0),
         )
     finally:
         db.close()

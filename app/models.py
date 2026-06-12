@@ -28,6 +28,8 @@ class Team(Base):
     color: Mapped[str] = mapped_column(String(16), nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     in_rotation: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    # время чек-апа здоровья в день заезда (индивидуально для команды)
+    checkup_time: Mapped[time | None] = mapped_column(Time, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -101,6 +103,8 @@ class DailyTask(Base):
 
     event_date: Mapped[date] = mapped_column(Date, primary_key=True)
     content: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    # «фишка дня» — отдельный текст, показывается всем командам
+    feature: Mapped[str] = mapped_column(Text, nullable=False, default="", server_default="")
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )

@@ -1,9 +1,9 @@
 {% extends "admin/_layout.html" %}
-{% block title %}Задание дня — admin{% endblock %}
+{% block title %}День — admin{% endblock %}
 
 {% block admin_content %}
 <section class="admin-section">
-  <h2>Задание дня</h2>
+  <h2>Задание и фишка дня</h2>
 
   <form class="date-form" method="get">
     <label>
@@ -14,7 +14,10 @@
 
   <form class="task-form" method="post">
     <input type="hidden" name="event_date" value="{{ selected.isoformat() }}">
-    <textarea name="content" rows="8" placeholder="Текст задания на {{ selected.strftime('%d.%m.%Y') }} (свободный)">{{ task.content if task else '' }}</textarea>
+    <h3>Задание дня</h3>
+    <textarea name="content" rows="6" placeholder="Текст задания на {{ selected.strftime('%d.%m.%Y') }} (свободный)">{{ task.content if task else '' }}</textarea>
+    <h3>Фишка дня</h3>
+    <textarea name="feature" rows="6" placeholder="Фишка дня на {{ selected.strftime('%d.%m.%Y') }} — видна всем командам">{{ task.feature if task else '' }}</textarea>
     <div class="task-form__actions">
       <button class="btn btn--primary" type="submit">Сохранить</button>
       {% if task %}<small>обновлено {{ task.updated_at.strftime('%d.%m %H:%M') }} ({{ task.updated_by or '—' }})</small>{% endif %}

@@ -1,0 +1,27 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Чек-ап — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Чек-ап здоровья (день заезда)</h2>
+
+  <p class="cat-hint">
+    Время прохождения мед. осмотра — индивидуально для каждой команды.
+    Показывается на вкладке «День» только в день заезда. Пустое поле — карточка не показывается.
+  </p>
+
+  <form method="post" class="checkup-form">
+    <div class="checkup-grid">
+      {% for t in teams %}
+      <label class="checkup-row" style="--c: {{ t.color }}">
+        <span class="checkup-row__name">{{ t.name }}</span>
+        <input type="time" name="checkup_{{ t.id }}" value="{{ t.checkup_time.strftime('%H:%M') if t.checkup_time else '' }}">
+      </label>
+      {% endfor %}
+    </div>
+    <div class="task-form__actions">
+      <button class="btn btn--primary" type="submit">Сохранить все</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

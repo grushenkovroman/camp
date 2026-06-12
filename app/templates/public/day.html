@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} — день{% endblock %}
+{% block body_class %}public{% endblock %}
+{% block body_style %}--team-color: {{ team.color }};{% endblock %}
+
+{% block content %}
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<main class="team-page">
+  <header class="team-head">
+    <div class="team-head__chip">КОМАНДА</div>
+    <h1 class="team-head__name glow">{{ team.name }}</h1>
+  </header>
+
+  <nav class="tabs">
+    <a class="tab" href="{{ url_for('public.team_page', team_uuid=team.id) }}">Баллы</a>
+    <a class="tab tab--active" href="{{ url_for('public.team_day', team_uuid=team.id) }}">День</a>
+    <a class="tab" href="{{ url_for('public.team_schedule', team_uuid=team.id) }}">Расписание</a>
+    <a class="tab" href="{{ url_for('public.team_ustav', team_uuid=team.id) }}">Устав</a>
+    <a class="tab" href="{{ url_for('public.team_tokens', team_uuid=team.id) }}">Токены</a>
+  </nav>
+
+  <section class="date-bar">
+    <a class="date-arrow" href="?date={{ prev_date.isoformat() }}" title="предыдущий день">◀</a>
+    <div class="date-bar__center">
+      <div class="date-bar__date glow">{{ selected.strftime('%d.%m.%Y') }}</div>
+      <div class="date-bar__sub">
+        {% if day_label_text %}{{ day_label_text }}{% elif selected == today %}сегодня{% else %}{{ selected.strftime('%A') }}{% endif %}
+      </div>
+    </div>
+    <a class="date-arrow" href="?date={{ next_date.isoformat() }}" title="следующий день">▶</a>
+  </section>
+
+  {% if is_arrival_day and team.checkup_time %}
+  <section class="card checkup-card">
+    <div class="card__title">ЧЕК-АП ЗДОРОВЬЯ</div>
+    <div class="checkup-card__main">
+      <span class="checkup-card__time glow">{{ team.checkup_time.strftime('%H:%M') }}</span>
+      <span class="checkup-card__caption">время прохождения для вашей команды</span>
+    </div>
+    <div class="checkup-card__note">Медицинский осмотр всех агентов в день заезда. Не опаздывайте!</div>
+  </section>
+  {% endif %}
+
+  {% if task and task.feature %}
+  <section class="card task-card">
+    <div class="card__title">ФИШКА ДНЯ</div>
+    <div class="task-card__body">{{ task.feature }}</div>
+  </section>
+  {% endif %}
+
+  {% if task and task.content %}
+  <section class="card task-card">
+    <div class="card__title">ЗАДАНИЕ ДНЯ</div>
+    <div class="task-card__body">{{ task.content }}</div>
+  </section>
+  {% endif %}
+
+  {% if not (task and (task.feature or task.content)) and not (is_arrival_day and team.checkup_time) %}
+  <section class="card">
+    <div class="empty">на этот день пока ничего нет</div>
+  </section>
+  {% endif %}
+</main>
+{% endblock %}

@@ -167,6 +167,24 @@ body.public .bg-glow {
   font-size: 18px; line-height: 1.5; white-space: pre-wrap;
 }
 
+/* checkup card */
+.checkup-card__main {
+  display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+}
+.checkup-card__time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 52px; font-weight: 800; line-height: 1;
+}
+.checkup-card__caption { font-size: 14px; opacity: 0.7; max-width: 240px; }
+.checkup-card__note {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px dashed rgba(255,255,255,0.12);
+  font-size: 13px; opacity: 0.7;
+}
+@media (max-width: 480px) {
+  .checkup-card__time { font-size: 42px; }
+}
+
 /* rank card */
 .rank-card__main {
   display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap;
@@ -389,6 +407,25 @@ body.public .bg-glow {
   font-size: 13px; line-height: 1.5; opacity: 0.65;
   max-width: 760px; margin: 0 0 16px;
 }
+
+/* admin: чек-ап */
+.checkup-grid {
+  display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+.checkup-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 8px 12px 8px 16px;
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+  position: relative;
+}
+.checkup-row::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--c); border-radius: 8px 0 0 8px;
+}
+.checkup-row__name { font-size: 14px; }
+.checkup-row input { width: 120px; }
 
 /* ========== admin ========== */
 body.admin { background: #050510; }

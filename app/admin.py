@@ -260,19 +260,22 @@ def daily_task():
 
         if request.method == "POST":
             content = request.form.get("content", "").strip()
+            feature = request.form.get("feature", "").strip()
             task = db.get(DailyTask, selected)
             if task:
                 task.content = content
+                task.feature = feature
                 task.updated_by = current_user.login
             else:
                 task = DailyTask(
                     event_date=selected,
                     content=content,
+                    feature=feature,
                     updated_by=current_user.login,
                 )
                 db.add(task)
             db.commit()
-            flash("Задание сохранено", "ok")
+            flash("Сохранено", "ok")
             return redirect(url_for("admin.daily_task", date=selected.isoformat()))
 
         task = db.get(DailyTask, selected)
@@ -282,6 +285,30 @@ def daily_task():
             selected=selected,
             today=today_local(),
         )
+    finally:
+        db.close()
+
+
+# === checkup ===========================================================
+
+@bp.route("/checkup", methods=["GET", "POST"])
+@login_required
+def checkup_times():
+    db = SessionLocal()
+    try:
+        teams = db.execute(
+            select(Team).order_by(Team.sort_order, Team.name)
+        ).scalars().all()
+
+        if request.method == "POST":
+            for t in teams:
+                raw = request.form.get(f"checkup_{t.id}", "").strip()
+                t.checkup_time = _parse_time(raw) if raw else None
+            db.commit()
+            flash("Времена чек-апа сохранены", "ok")
+            return redirect(url_for("admin.checkup_times"))
+
+        return render_template("admin/checkup.html", teams=teams)
     finally:
         db.close()
 

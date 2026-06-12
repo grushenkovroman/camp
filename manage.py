@@ -35,6 +35,12 @@ def create_schema():
         conn.execute(text(
             "ALTER TABLE teams ADD COLUMN IF NOT EXISTS in_rotation BOOLEAN NOT NULL DEFAULT TRUE"
         ))
+        conn.execute(text(
+            "ALTER TABLE teams ADD COLUMN IF NOT EXISTS checkup_time TIME"
+        ))
+        conn.execute(text(
+            "ALTER TABLE daily_tasks ADD COLUMN IF NOT EXISTS feature TEXT NOT NULL DEFAULT ''"
+        ))
         conn.commit()
     print("  ok")
 
