@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}{{ team.name }} — устав{% endblock %}
+{% block body_class %}public{% endblock %}
+{% block body_style %}--team-color: {{ team.color }};{% endblock %}
+
+{% block content %}
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<main class="team-page">
+  <header class="team-head">
+    <div class="team-head__chip">КОМАНДА</div>
+    <h1 class="team-head__name glow">{{ team.name }}</h1>
+  </header>
+
+  <nav class="tabs">
+    <a class="tab" href="{{ url_for('public.team_page', team_uuid=team.id) }}">Баллы</a>
+    <a class="tab" href="{{ url_for('public.team_schedule', team_uuid=team.id) }}">Расписание</a>
+    <a class="tab tab--active" href="{{ url_for('public.team_ustav', team_uuid=team.id) }}">Устав</a>
+  </nav>
+
+  <section class="kodeks">
+    <div class="kodeks__status">
+      <span class="kodeks__status-left">&gt;&gt; ПРОТОКОЛ АКТИВИРОВАН&ensp;//&ensp;СТАТУС: ОНЛАЙН&ensp;//&ensp;УРОВЕНЬ ДОПУСКА: АГЕНТ</span>
+      <span class="kodeks__status-right">BASE-4:12 // REV 2.0</span>
+    </div>
+
+    <h2 class="kodeks__title">КОДЕКС БАЗЫ 4:12</h2>
+    <div class="kodeks__sub">─ ─ ─&ensp;ПРОТОКОЛ АКТИВАЦИИ КИБЕР-АГЕНТА&ensp;─ ─ ─</div>
+
+    <div class="kodeks__rule"></div>
+
+    <div class="kodeks__quote">" Помни, Кайрос наблюдает за тобой... "</div>
+
+    <div class="kodeks__binary">01101011 01100001 01101001 01110010 01101111 01110011 00100000 01101111 01101110 01101100 01101001 01101110 01100101</div>
+
+    <article class="kmod kmod--green">
+      <div class="kmod__head">[МОДУЛЬ 01]&ensp;ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ АГЕНТА</div>
+      <div class="kmod__body">
+        <div class="kmod__directive">ДИРЕКТИВА: Неисправный агент угрожает всей миссии</div>
+        <ol class="kmod__items">
+          <li><span class="kmod__num">01.</span> Регулярно умывайся и следи за чистотой тела и рук.</li>
+          <li><span class="kmod__num">02.</span> Держи спальное место в идеальном порядке: одежда сложена, вещи не разбросаны.</li>
+          <li><span class="kmod__num">03.</span> Соблюдай чистоту на всей территории базы: сразу убирай мусор.</li>
+        </ol>
+      </div>
+      <div class="kmod__tokens">
+        <span class="kmod__loss">[-]&ensp;НАРУШЕНИЕ: −2 ТОКЕНА</span>
+        <span class="kmod__gain">БЕЗУПРЕЧНОСТЬ: +2 ТОКЕНА&ensp;[+]</span>
+      </div>
+    </article>
+
+    <article class="kmod kmod--cyan">
+      <div class="kmod__head">[МОДУЛЬ 02]&ensp;ПРОТОКОЛ СУБОРДИНАЦИИ</div>
+      <div class="kmod__body">
+        <div class="kmod__directive">ДИРЕКТИВА: Цепочка команд не обсуждается — она выполняется</div>
+        <ol class="kmod__items">
+          <li><span class="kmod__num">04.</span> В присутствии Кайроса — строгое молчание, говори только по разрешению.</li>
+          <li><span class="kmod__num">05.</span> Слушайся своих навигаторов без возражений — их слово есть команда базы.</li>
+          <li><span class="kmod__num">06.</span> Будь пунктуален: опоздание — это сбой, который роняет рейтинг всего кибер-отряда.</li>
+          <li><span class="kmod__num">07.</span> На сборах и построениях занимай своё место, внимательно слушай команды.</li>
+        </ol>
+      </div>
+      <div class="kmod__tokens">
+        <span class="kmod__loss">[-]&ensp;НАРУШЕНИЕ: −3 ТОКЕНА</span>
+        <span class="kmod__gain">БЕЗУПРЕЧНОСТЬ: +3 ТОКЕНА&ensp;[+]</span>
+      </div>
+    </article>
+
+    <article class="kmod kmod--orange">
+      <div class="kmod__head">[МОДУЛЬ 03]&ensp;СЕТЕВАЯ ЭТИКА КИБЕР-АГЕНТА</div>
+      <div class="kmod__body">
+        <div class="kmod__directive">ДИРЕКТИВА: Сила базы — в связях между агентами</div>
+        <ol class="kmod__items">
+          <li><span class="kmod__num">08.</span> Никаких конфликтов, грубых слов и физических столкновений.</li>
+          <li><span class="kmod__num">09.</span> Поддерживай товарищей, защищай слабых, береги кибер-отряд.</li>
+          <li><span class="kmod__num">10.</span> В ночное время и дневной сон — тишина. Уважение к отдыху других — это уважение к миссии.</li>
+        </ol>
+      </div>
+      <div class="kmod__tokens">
+        <span class="kmod__loss">[-]&ensp;НАРУШЕНИЕ: −2 ТОКЕНА</span>
+        <span class="kmod__gain">БЕЗУПРЕЧНОСТЬ: +5 ТОКЕНОВ&ensp;[+]</span>
+      </div>
+    </article>
+
+    <div class="kodeks__rule"></div>
+
+    <div class="kodeks__footnote">Соблюдение кодекса поднимает рейтинг кибер-отряда и приближает человечество ко спасению.</div>
+    <div class="kodeks__footnote kodeks__footnote--dim">Нарушение кодекса ослабляет базу и ставит миссию под угрозу.</div>
+
+    <div class="kodeks__kairos">// КАЙРОС ОНЛАЙН. ВЕДЁТСЯ ВИДЕО НАБЛЮДЕНИЕ ПО ВСЕЙ БАЗЕ 4:12 //</div>
+  </section>
+</main>
+{% endblock %}

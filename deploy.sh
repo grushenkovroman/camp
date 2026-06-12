@@ -15,6 +15,8 @@ rsync -av --delete \
   --exclude '.git' \
   --exclude '.env*' \
   --exclude '.claude' \
+  --exclude 'docs' \
+  --exclude 'node_modules' \
   --exclude '*.pyc' \
   --exclude '.DS_Store' \
   ./ "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/"

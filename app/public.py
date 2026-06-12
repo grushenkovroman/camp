@@ -188,6 +188,18 @@ def team_schedule(team_uuid: uuid.UUID):
         db.close()
 
 
+@bp.get("/<uuid:team_uuid>/ustav")
+def team_ustav(team_uuid: uuid.UUID):
+    db = SessionLocal()
+    try:
+        team = db.get(Team, team_uuid)
+        if not team:
+            abort(404)
+        return render_template("public/ustav.html", team=team)
+    finally:
+        db.close()
+
+
 @bp.get("/")
 def index():
     abort(404)

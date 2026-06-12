@@ -243,6 +243,128 @@ body.public .bg-glow {
   background: var(--team-color); box-shadow: 0 0 8px var(--team-color);
 }
 
+/* ========== kodeks (public ustav) ========== */
+.kodeks {
+  position: relative;
+  background: #06071a;
+  background-image:
+    linear-gradient(rgba(12,15,42,0.9) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(12,15,42,0.9) 1px, transparent 1px);
+  background-size: 19px 19px;
+  border: 1px solid #00e5ff;
+  border-radius: 4px;
+  box-shadow: 0 0 18px rgba(0,229,255,0.35), inset 0 0 32px rgba(0,229,255,0.06);
+  padding: 18px 18px 22px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #cdd8f0;
+}
+.kodeks__status {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  background: #0b0d26;
+  padding: 6px 10px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  margin-bottom: 22px;
+}
+.kodeks__status-left { color: #00ff41; }
+.kodeks__status-right { color: #404870; }
+.kodeks__title {
+  margin: 0; text-align: center;
+  font-size: clamp(26px, 6vw, 44px); font-weight: 800; letter-spacing: 0.04em;
+  color: #00e5ff;
+  text-shadow: 0 0 10px #00e5ff, 0 0 32px rgba(0,229,255,0.6);
+}
+.kodeks__sub {
+  text-align: center; margin-top: 8px;
+  font-size: 12px; letter-spacing: 0.18em; color: #404870;
+}
+.kodeks__rule {
+  height: 3px; margin: 18px 0;
+  background-image: linear-gradient(#00e5ff, #00e5ff), repeating-linear-gradient(90deg, #00e5ff 0 3px, transparent 3px 18px);
+  background-size: 100% 1px, 100% 3px;
+  background-position: 0 0, 0 100%;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+}
+.kodeks__quote {
+  text-align: center; font-style: italic;
+  color: #ffe066; font-size: 14px;
+  margin: 4px 0 14px;
+}
+.kodeks__binary {
+  text-align: center; font-size: 8px; letter-spacing: 0.04em;
+  color: rgba(0,229,255,0.28);
+  margin-bottom: 20px;
+  overflow: hidden; white-space: nowrap; text-overflow: clip;
+}
+/* модули */
+.kmod { --mc: #00e5ff; --mc-soft: rgba(0,229,255,0.16); --mc-glow: rgba(0,229,255,0.3); }
+.kmod--green  { --mc: #00ff41; --mc-soft: rgba(0,255,65,0.14);  --mc-glow: rgba(0,255,65,0.3); }
+.kmod--cyan   { --mc: #00e5ff; --mc-soft: rgba(0,229,255,0.14); --mc-glow: rgba(0,229,255,0.3); }
+.kmod--orange { --mc: #ff7b2c; --mc-soft: rgba(255,123,44,0.16); --mc-glow: rgba(255,123,44,0.35); }
+.kmod {
+  background: #090b20;
+  border: 1px solid var(--mc);
+  box-shadow: 0 0 14px var(--mc-glow);
+  margin-bottom: 20px;
+}
+.kmod__head {
+  display: flex; align-items: center;
+  background: var(--mc-soft);
+  border-left: 5px solid var(--mc);
+  color: var(--mc);
+  font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 8px 12px;
+}
+.kmod__body { padding: 14px 14px 16px; }
+.kmod__directive {
+  font-style: italic; font-size: 12px;
+  color: var(--mc); opacity: 0.6;
+  padding-bottom: 10px; margin-bottom: 12px;
+  border-bottom: 1px dashed #1e2244;
+}
+.kmod__items {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 9px;
+  font-size: 13px; line-height: 1.45;
+}
+.kmod__items li { padding-left: 34px; position: relative; }
+.kmod__num {
+  position: absolute; left: 0; top: 0;
+  color: #4477ff; font-weight: 700;
+}
+.kmod__tokens {
+  display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  background: #07091c;
+  border-top: 1px solid #1e2244;
+  padding: 7px 12px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+}
+.kmod__loss { color: #ff3366; }
+.kmod__gain { color: #00ff41; }
+/* подвал кодекса */
+.kodeks__footnote {
+  text-align: center; font-size: 12px; line-height: 1.5;
+  margin-bottom: 4px;
+}
+.kodeks__footnote--dim { color: #404870; font-size: 11px; margin-bottom: 18px; }
+.kodeks__kairos {
+  text-align: center;
+  background: rgba(0,255,65,0.08);
+  border: 1px solid #00ff41;
+  box-shadow: 0 0 14px rgba(0,255,65,0.3);
+  color: #00ff41;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
+  padding: 9px 12px;
+}
+@media (max-width: 560px) {
+  .kodeks { padding: 14px 12px 18px; }
+  .kodeks__status { font-size: 9px; }
+  .kmod__head { font-size: 11.5px; }
+  .kmod__items { font-size: 12.5px; }
+  .kmod__items li { padding-left: 30px; }
+  .kodeks__kairos { font-size: 10.5px; }
+}
+
 /* ========== admin ========== */
 body.admin { background: #050510; }
 .admin-bar {
