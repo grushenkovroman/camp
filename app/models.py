@@ -76,6 +76,26 @@ class ScoreEvent(Base):
     team: Mapped[Team] = relationship(back_populates="score_events")
 
 
+class ScoreCategory(Base):
+    """Категория начисления/штрафа: показывается детям в «Токенах»
+    и подставляет дефолтные баллы в форме начисления."""
+
+    __tablename__ = "score_categories"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    # как показывать величину детям: «по 5», «от 0 до 10», «[−5; +5]»
+    points_label: Mapped[str] = mapped_column(String(100), default="", nullable=False)
+    # что подставляется в форму начисления по умолчанию
+    default_points: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    kind: Mapped[str] = mapped_column(
+        Enum("bonus", "penalty", "mixed", name="category_kind"),
+        default="bonus",
+        nullable=False,
+    )
+    sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+
+
 class DailyTask(Base):
     __tablename__ = "daily_tasks"
 

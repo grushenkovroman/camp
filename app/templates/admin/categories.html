@@ -1,0 +1,52 @@
+{% extends "admin/_layout.html" %}
+{% block title %}Категории — admin{% endblock %}
+
+{% block admin_content %}
+<section class="admin-section">
+  <h2>Категории начислений и штрафов</h2>
+
+  <p class="cat-hint">
+    Категории показываются детям на вкладке «Токены» и подставляют баллы в форме начисления.
+    «Баллы по умолчанию» — то, что вставится в форму (можно поправить перед начислением).
+    «Подпись» — как величина показана детям («по 5», «от 0 до 10», «[−5; +5]»); если пусто, покажутся баллы по умолчанию.
+  </p>
+
+  <form class="quick-score" method="post" action="{{ url_for('admin.category_create') }}">
+    <input name="name" placeholder="Название" required style="flex:1; min-width:220px">
+    <input name="points_label" placeholder="подпись (по 5)" style="width:130px">
+    <input name="default_points" type="number" step="1" placeholder="±баллы" required style="width:100px">
+    <select name="kind" style="width:150px">
+      <option value="bonus">начисление</option>
+      <option value="penalty">штраф</option>
+      <option value="mixed">±</option>
+    </select>
+    <button class="btn btn--primary" type="submit">Добавить</button>
+  </form>
+
+  {% if items %}
+  <div class="activity-list">
+    {% for c in items %}
+    <div class="activity-row">
+      <form method="post" action="{{ url_for('admin.category_update', item_id=c.id) }}" class="activity-form">
+        <input name="sort_order" type="number" value="{{ c.sort_order }}" title="порядок" style="width:64px">
+        <input name="name" value="{{ c.name }}" required style="flex:1; min-width:220px">
+        <input name="points_label" value="{{ c.points_label }}" placeholder="подпись" style="width:130px">
+        <input name="default_points" type="number" step="1" value="{{ c.default_points }}" style="width:100px">
+        <select name="kind" style="width:150px">
+          <option value="bonus" {% if c.kind == 'bonus' %}selected{% endif %}>начисление</option>
+          <option value="penalty" {% if c.kind == 'penalty' %}selected{% endif %}>штраф</option>
+          <option value="mixed" {% if c.kind == 'mixed' %}selected{% endif %}>±</option>
+        </select>
+        <button class="btn btn--small" type="submit">Сохранить</button>
+      </form>
+      <form method="post" action="{{ url_for('admin.category_delete', item_id=c.id) }}" onsubmit="return confirm('Удалить категорию «{{ c.name }}»? Уже сделанные начисления не изменятся.')">
+        <button class="btn btn--small btn--danger" type="submit">×</button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty">категорий пока нет</div>
+  {% endif %}
+</section>
+{% endblock %}

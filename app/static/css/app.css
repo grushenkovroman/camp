@@ -307,6 +307,8 @@ body.public .bg-glow {
 .kmod--green  { --mc: #00ff41; --mc-soft: rgba(0,255,65,0.14);  --mc-glow: rgba(0,255,65,0.3); }
 .kmod--cyan   { --mc: #00e5ff; --mc-soft: rgba(0,229,255,0.14); --mc-glow: rgba(0,229,255,0.3); }
 .kmod--orange { --mc: #ff7b2c; --mc-soft: rgba(255,123,44,0.16); --mc-glow: rgba(255,123,44,0.35); }
+.kmod--red    { --mc: #ff3366; --mc-soft: rgba(255,51,102,0.14); --mc-glow: rgba(255,51,102,0.35); }
+.kmod--yellow { --mc: #ffe066; --mc-soft: rgba(255,224,102,0.13); --mc-glow: rgba(255,224,102,0.3); }
 .kmod {
   background: #090b20;
   border: 1px solid var(--mc);
@@ -338,15 +340,25 @@ body.public .bg-glow {
   position: absolute; left: 0; top: 0;
   color: #4477ff; font-weight: 700;
 }
-.kmod__tokens {
-  display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-  background: #07091c;
-  border-top: 1px solid #1e2244;
-  padding: 7px 12px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+/* строки реестра токенов */
+.toks {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 10px;
+  font-size: 13px; line-height: 1.45;
 }
-.kmod__loss { color: #ff3366; }
-.kmod__gain { color: #00ff41; }
+.tok { display: flex; align-items: baseline; gap: 10px; }
+.tok__name { flex-shrink: 1; }
+.tok__dots {
+  flex: 1; min-width: 24px;
+  border-bottom: 1px dotted #404870;
+  transform: translateY(-3px);
+}
+.tok__val {
+  white-space: nowrap;
+  font-weight: 800;
+  color: var(--mc);
+  text-shadow: 0 0 8px var(--mc-glow);
+}
 /* подвал кодекса */
 .kodeks__footnote {
   text-align: center; font-size: 12px; line-height: 1.5;
@@ -368,7 +380,14 @@ body.public .bg-glow {
   .kmod__head { font-size: 11.5px; }
   .kmod__items { font-size: 12.5px; }
   .kmod__items li { padding-left: 30px; }
+  .toks { font-size: 12.5px; }
   .kodeks__kairos { font-size: 10.5px; }
+}
+
+/* admin: категории */
+.cat-hint {
+  font-size: 13px; line-height: 1.5; opacity: 0.65;
+  max-width: 760px; margin: 0 0 16px;
 }
 
 /* ========== admin ========== */
@@ -553,11 +572,14 @@ body.admin { background: #050510; }
 
 /* ========== tabs (public) ========== */
 .tabs {
-  display: flex; gap: 4px; margin: 0 0 24px;
+  display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 24px;
   padding: 4px;
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 10px; width: fit-content;
+}
+@media (max-width: 480px) {
+  .tab { padding: 8px 12px; font-size: 11px; letter-spacing: 0.1em; }
 }
 .tab {
   padding: 8px 18px; border-radius: 6px;

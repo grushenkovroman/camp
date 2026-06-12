@@ -17,6 +17,7 @@
     <a class="tab" href="{{ url_for('public.team_page', team_uuid=team.id) }}">Баллы</a>
     <a class="tab" href="{{ url_for('public.team_schedule', team_uuid=team.id) }}">Расписание</a>
     <a class="tab tab--active" href="{{ url_for('public.team_ustav', team_uuid=team.id) }}">Устав</a>
+    <a class="tab" href="{{ url_for('public.team_tokens', team_uuid=team.id) }}">Токены</a>
   </nav>
 
   <section class="kodeks">
@@ -45,10 +46,6 @@
           <li><span class="kmod__num">03.</span> Соблюдай чистоту на всей территории базы: сразу убирай мусор.</li>
         </ol>
       </div>
-      <div class="kmod__tokens">
-        <span class="kmod__loss">[-]&ensp;НАРУШЕНИЕ: −2 ТОКЕНА</span>
-        <span class="kmod__gain">БЕЗУПРЕЧНОСТЬ: +2 ТОКЕНА&ensp;[+]</span>
-      </div>
     </article>
 
     <article class="kmod kmod--cyan">
@@ -62,10 +59,6 @@
           <li><span class="kmod__num">07.</span> На сборах и построениях занимай своё место, внимательно слушай команды.</li>
         </ol>
       </div>
-      <div class="kmod__tokens">
-        <span class="kmod__loss">[-]&ensp;НАРУШЕНИЕ: −3 ТОКЕНА</span>
-        <span class="kmod__gain">БЕЗУПРЕЧНОСТЬ: +3 ТОКЕНА&ensp;[+]</span>
-      </div>
     </article>
 
     <article class="kmod kmod--orange">
@@ -77,10 +70,6 @@
           <li><span class="kmod__num">09.</span> Поддерживай товарищей, защищай слабых, береги кибер-отряд.</li>
           <li><span class="kmod__num">10.</span> Во время ночного и дневного сна соблюдай тишину. Уважение к отдыху других — это уважение к миссии.</li>
         </ol>
-      </div>
-      <div class="kmod__tokens">
-        <span class="kmod__loss">[-]&ensp;НАРУШЕНИЕ: −2 ТОКЕНА</span>
-        <span class="kmod__gain">БЕЗУПРЕЧНОСТЬ: +5 ТОКЕНОВ&ensp;[+]</span>
       </div>
     </article>
 

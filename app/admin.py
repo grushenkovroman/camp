@@ -22,6 +22,7 @@ from .models import (
     Activity,
     ScheduleBlock,
     RotationSlot,
+    ScoreCategory,
 )
 from .auth import verify_password
 from .utils import today_local, parse_date, day_index, day_label
@@ -34,6 +35,12 @@ def _parse_time(value: str | None) -> time | None:
         return datetime.strptime(value.strip(), "%H:%M").time()
     except ValueError:
         return None
+
+
+def _all_categories(db):
+    return db.execute(
+        select(ScoreCategory).order_by(ScoreCategory.sort_order, ScoreCategory.id)
+    ).scalars().all()
 
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -89,6 +96,7 @@ def dashboard():
             today=today_local(),
             selected=selected,
             task=task,
+            categories=_all_categories(db),
         )
     finally:
         db.close()
@@ -192,6 +200,7 @@ def scores_list():
             selected=selected,
             today=today_local(),
             teams=teams,
+            categories=_all_categories(db),
         )
     finally:
         db.close()
@@ -392,6 +401,93 @@ def activity_delete(item_id):
     finally:
         db.close()
     return redirect(url_for("admin.activities_list"))
+
+
+# === score categories ==================================================
+
+def _category_kind(raw: str | None, fallback: str = "bonus") -> str:
+    return raw if raw in ("bonus", "penalty", "mixed") else fallback
+
+
+@bp.get("/categories")
+@login_required
+def categories_list():
+    db = SessionLocal()
+    try:
+        return render_template("admin/categories.html", items=_all_categories(db))
+    finally:
+        db.close()
+
+
+@bp.post("/categories")
+@login_required
+def category_create():
+    db = SessionLocal()
+    try:
+        name = request.form.get("name", "").strip()
+        if not name:
+            flash("Введите название", "error")
+            return redirect(url_for("admin.categories_list"))
+        try:
+            default_points = int(request.form.get("default_points") or 0)
+        except ValueError:
+            default_points = 0
+        max_sort = db.execute(
+            select(func.coalesce(func.max(ScoreCategory.sort_order), 0))
+        ).scalar_one()
+        db.add(ScoreCategory(
+            name=name,
+            points_label=request.form.get("points_label", "").strip(),
+            default_points=default_points,
+            kind=_category_kind(request.form.get("kind")),
+            sort_order=max_sort + 1,
+        ))
+        db.commit()
+        flash("Категория добавлена", "ok")
+    finally:
+        db.close()
+    return redirect(url_for("admin.categories_list"))
+
+
+@bp.post("/categories/<int:item_id>")
+@login_required
+def category_update(item_id):
+    db = SessionLocal()
+    try:
+        c = db.get(ScoreCategory, item_id)
+        if not c:
+            abort(404)
+        c.name = request.form.get("name", c.name).strip() or c.name
+        c.points_label = request.form.get("points_label", "").strip()
+        try:
+            c.default_points = int(request.form.get("default_points") or c.default_points)
+        except ValueError:
+            pass
+        c.kind = _category_kind(request.form.get("kind"), c.kind)
+        try:
+            c.sort_order = int(request.form.get("sort_order") or c.sort_order)
+        except ValueError:
+            pass
+        db.commit()
+        flash("Сохранено", "ok")
+    finally:
+        db.close()
+    return redirect(url_for("admin.categories_list"))
+
+
+@bp.post("/categories/<int:item_id>/delete")
+@login_required
+def category_delete(item_id):
+    db = SessionLocal()
+    try:
+        c = db.get(ScoreCategory, item_id)
+        if c:
+            db.delete(c)
+            db.commit()
+            flash("Удалено", "ok")
+    finally:
+        db.close()
+    return redirect(url_for("admin.categories_list"))
 
 
 # === schedule blocks ===================================================

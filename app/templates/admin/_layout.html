@@ -11,6 +11,7 @@
       <a href="{{ url_for('admin.rotation_grid') }}">Ротация</a>
       <a href="{{ url_for('admin.schedule_list') }}">Расписание</a>
       <a href="{{ url_for('admin.activities_list') }}">Активности</a>
+      <a href="{{ url_for('admin.categories_list') }}">Категории</a>
       <a href="{{ url_for('admin.shift_settings') }}">Смена</a>
     </nav>
   </div>
@@ -24,4 +25,5 @@
 <main class="admin-main">
   {% block admin_content %}{% endblock %}
 </main>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 {% endblock %}

@@ -13,6 +13,7 @@ from app.models import (
     Activity,
     ScheduleBlock,
     RotationSlot,
+    ScoreCategory,
 )
 from app.auth import hash_password
 from app.config import Config
@@ -213,12 +214,56 @@ def seed_schedule():
         db.close()
 
 
+# (name, points_label, default_points, kind)
+SCORE_CATEGORIES = [
+    ("Уборка в боксах", "от 0 до 10", 10, "bonus"),
+    ("Участие в зарядке", "по 5", 5, "bonus"),
+    ("Секретное задание", "по 5", 5, "bonus"),
+    ("Призовое место в эстафете", "по 5", 5, "bonus"),
+    ("Ключевое достижение в большой игре", "по 5", 5, "bonus"),
+    ("Особое награждение от хранителей истин", "+10", 10, "bonus"),
+    ("Ответ на свечке: полезный", "+5", 5, "bonus"),
+    ("Ответ на свечке: выдающийся", "+10", 10, "bonus"),
+    ("Спортивные достижения", "от 1 до 5", 5, "bonus"),
+    ("Нарушение дисциплины", "−5", -5, "penalty"),
+    ("Грубое нарушение дисциплины", "−10", -10, "penalty"),
+    ("Красная карточка", "−50", -50, "penalty"),
+    ("Тайминг при построении", "−5", -5, "penalty"),
+    ("Тишина во время форумов", "−10", -10, "penalty"),
+    ("Соблюдение графика сна: день", "[−5; +5]", 5, "mixed"),
+    ("Соблюдение графика сна: ночь", "[−5; +5]", 5, "mixed"),
+]
+
+
+def seed_categories():
+    """Засеять категории начислений/штрафов (если таблица пуста)."""
+    db = SessionLocal()
+    try:
+        existing = db.execute(select(ScoreCategory)).scalars().first()
+        if existing:
+            print("→ категории уже есть, сидинг пропущен")
+            return
+        for i, (name, label, points, kind) in enumerate(SCORE_CATEGORIES):
+            db.add(ScoreCategory(
+                name=name,
+                points_label=label,
+                default_points=points,
+                kind=kind,
+                sort_order=i,
+            ))
+        db.commit()
+        print(f"→ создано категорий: {len(SCORE_CATEGORIES)}")
+    finally:
+        db.close()
+
+
 def init():
     create_schema()
     ensure_admin()
     seed_teams()
     seed_shift()
     seed_schedule()
+    seed_categories()
 
 
 def reset_admin_password():
@@ -259,6 +304,7 @@ COMMANDS = {
     "seed-teams": seed_teams,
     "seed-shift": seed_shift,
     "seed-schedule": seed_schedule,
+    "seed-categories": seed_categories,
     "reset-admin": reset_admin_password,
     "list-teams": list_teams,
     "gen-secret": gen_secret,

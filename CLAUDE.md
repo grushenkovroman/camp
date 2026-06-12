@@ -30,6 +30,7 @@
 - `teams (id UUID PK, name, color, sort_order, created_at)`
 - `team_members (id, team_id FK, name, role ENUM 'member'|'mentor', sort_order)`
 - `score_events (id, team_id FK, points INT, reason TEXT, event_date DATE, created_at, created_by)`
+- `score_categories (id, name, points_label, default_points INT, kind ENUM 'bonus'|'penalty'|'mixed', sort_order)` — категории начислений/штрафов; сидинг `manage.py seed-categories`
 - `daily_tasks (event_date DATE PK, content TEXT, updated_at, updated_by)`
 - `admin_users (id, login UNIQUE, password_hash)`
 
@@ -38,7 +39,8 @@
 **Публично:**
 - `GET /<team_uuid>` — страница команды (по умолчанию сегодня по МСК); сверху блок «Рейтинг»: место команды по сумме баллов за всю смену («N из 17»), равные суммы делят место, другие команды не показываются
 - `GET /<team_uuid>?date=YYYY-MM-DD` — конкретный день; стрелки «← / →» по доступным датам, лимитов диапазона нет
-- `GET /<team_uuid>/ustav` — вкладка «Устав»: «Кодекс базы 4:12» (HTML-вёрстка по мотивам `kodeks_bazy_412.pdf`, генератор — `tools/gen_kodeks.py`), без строки подписи
+- `GET /<team_uuid>/ustav` — вкладка «Устав» (HTML-вёрстка по мотивам `kodeks_bazy_412.pdf`, генератор — `tools/gen_kodeks.py`), без строки подписи и без баллов
+- `GET /<team_uuid>/tokens` — вкладка «Токены»: реестр начислений и штрафов из `score_categories` (группы: начисления / штрафы / двойной исход), в стиле устава
 
 **Админка (требует login):**
 - `GET/POST /admin/login`, `POST /admin/logout`
@@ -46,6 +48,7 @@
 - `/admin/teams` — CRUD команд (имя, цвет, участники, наставники)
 - `/admin/scores` — добавить/удалить начисление (команда, дата, ±баллы, причина)
 - `/admin/daily-task` — задание на дату (для всех)
+- `/admin/categories` — CRUD категорий начислений; в формах начисления выбор категории автоподставляет баллы и причину (правится перед отправкой, JS в `static/js/admin.js`)
 
 ## Дизайн
 

@@ -4,18 +4,7 @@
 {% block admin_content %}
 <section class="admin-section">
   <h2>Быстрое начисление</h2>
-  <form class="quick-score" method="post" action="{{ url_for('admin.score_create') }}">
-    <select name="team_id" required>
-      <option value="">— команда —</option>
-      {% for t in teams %}
-        <option value="{{ t.id }}">{{ t.name }}</option>
-      {% endfor %}
-    </select>
-    <input name="points" type="number" placeholder="±баллы" required step="1">
-    <input name="reason" type="text" placeholder="причина (свободный текст)">
-    <input name="event_date" type="date" value="{{ selected.isoformat() }}">
-    <button class="btn btn--primary" type="submit">Начислить</button>
-  </form>
+  {% include "admin/_quick_score.html" %}
 </section>
 
 <section class="admin-section">

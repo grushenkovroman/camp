@@ -13,6 +13,7 @@ from .models import (
     ScheduleBlock,
     RotationSlot,
     Activity,
+    ScoreCategory,
 )
 from .utils import today_local, parse_date, shift_date, day_index, day_label
 from .config import Config
@@ -196,6 +197,27 @@ def team_ustav(team_uuid: uuid.UUID):
         if not team:
             abort(404)
         return render_template("public/ustav.html", team=team)
+    finally:
+        db.close()
+
+
+@bp.get("/<uuid:team_uuid>/tokens")
+def team_tokens(team_uuid: uuid.UUID):
+    db = SessionLocal()
+    try:
+        team = db.get(Team, team_uuid)
+        if not team:
+            abort(404)
+        cats = db.execute(
+            select(ScoreCategory).order_by(ScoreCategory.sort_order, ScoreCategory.id)
+        ).scalars().all()
+        return render_template(
+            "public/tokens.html",
+            team=team,
+            bonus=[c for c in cats if c.kind == "bonus"],
+            penalty=[c for c in cats if c.kind == "penalty"],
+            mixed=[c for c in cats if c.kind == "mixed"],
+        )
     finally:
         db.close()
 
